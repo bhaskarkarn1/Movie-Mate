@@ -46,7 +46,7 @@ def recommend(movie):
 # UI
 st.title("🎬 Movie Mate")
 
-selected_movie = st.selectbox("Which movie do you want to look at?", movies["title"].values)
+selected_movie = st.selectbox("Choose a movie to see what you'd enjoy next:", movies["title"].values)
 
 if st.button("Recommend"):
     names, posters = recommend(selected_movie)
