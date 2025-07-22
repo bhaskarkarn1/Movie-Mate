@@ -3,18 +3,18 @@ import pandas as pd
 import streamlit as st
 import requests
 import os
-import gdown
+import urllib.request
 
 # Ensure models folder exists
 if not os.path.exists("models"):
     os.makedirs("models")
 
-# Use gdown to download directly from Google Drive (RECOMMENDED)
-movie_dict_url = "https://drive.google.com/uc?id=13zleeD7zwLRLHI0VMxBbFVGOm8R4pdcb"
-similarity_url = "https://drive.google.com/uc?id=19-LunxNRbAIrwRpaOfmlBpV7D1LAgypR"
+# Use urllib to download from Google Drive
+movie_dict_url = "https://drive.google.com/uc?export=download&id=13zleeD7zwLRLHI0VMxBbFVGOm8R4pdcb"
+similarity_url = "https://drive.google.com/uc?export=download&id=19-LunxNRbAIrwRpaOfmlBpV7D1LAgypR"
 
-gdown.download(movie_dict_url, "models/movie_dict.pkl", quiet=False)
-gdown.download(similarity_url, "models/similarity.pkl", quiet=False)
+urllib.request.urlretrieve(movie_dict_url, "models/movie_dict.pkl")
+urllib.request.urlretrieve(similarity_url, "models/similarity.pkl")
 
 # ✅ Now load after download
 movies_dict = pickle.load(open('models/movie_dict.pkl', 'rb'))
