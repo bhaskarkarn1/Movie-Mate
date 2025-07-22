@@ -2,8 +2,21 @@ import pickle
 import pandas as pd
 import streamlit as st
 import requests
+import os
+import gdown  # ✅ Handles large file downloads from Google Drive
 
-# Load local model files
+# Ensure models folder exists
+if not os.path.exists("models"):
+    os.makedirs("models")
+
+# Download safely via gdown
+movie_dict_url = "https://drive.google.com/uc?id=13zleeD7zwLRLHI0VMxBbFVGOm8R4pdcb"
+similarity_url = "https://drive.google.com/uc?id=19-LunxNRbAIrwRpaOfmlBpV7D1LAgypR"
+
+gdown.download(movie_dict_url, "models/movie_dict.pkl", quiet=False)
+gdown.download(similarity_url, "models/similarity.pkl", quiet=False)
+
+# ✅ Now load after download
 movies_dict = pickle.load(open('models/movie_dict.pkl', 'rb'))
 movies = pd.DataFrame(movies_dict)
 similarity = pickle.load(open('models/similarity.pkl', 'rb'))
