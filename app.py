@@ -4,6 +4,7 @@ import streamlit as st
 import requests
 import os
 import urllib.request
+import gdown
 
 # Create a folder to store the downloaded files
 if not os.path.exists("models"):
@@ -21,6 +22,17 @@ urllib.request.urlretrieve(similarity_url, "models/similarity.pkl")
 movies_dict = pickle.load(open('models/movie_dict.pkl', 'rb'))
 movies = pd.DataFrame(movies_dict)
 similarity = pickle.load(open('models/similarity.pkl', 'rb'))
+
+# Create models folder if not exists
+if not os.path.exists("models"):
+    os.makedirs("models")
+
+# Use gdown to download directly from Google Drive
+movie_dict_url = "https://drive.google.com/uc?id=13zleeD7zwLRLHI0VMxBbFVGOm8R4pdcb"
+similarity_url = "https://drive.google.com/uc?id=19-LunxNRbAIrwRpaOfmlBpV7D1LAgypR"
+
+gdown.download(movie_dict_url, "models/movie_dict.pkl", quiet=False)
+gdown.download(similarity_url, "models/similarity.pkl", quiet=False)
 
 # TMDB Poster Fetch Function
 def fetch_poster(movie_id):
