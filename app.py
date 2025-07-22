@@ -3,38 +3,25 @@ import pandas as pd
 import streamlit as st
 import requests
 import os
-import urllib.request
 import gdown
 
-# Create a folder to store the downloaded files
+# Ensure models folder exists
 if not os.path.exists("models"):
     os.makedirs("models")
 
-# Download movie_dict.pkl
-movie_dict_url = "https://drive.google.com/uc?id=13zleeD7zwLRLHI0VMxBbFVGOm8R4pdcb"
-urllib.request.urlretrieve(movie_dict_url, "models/movie_dict.pkl")
-
-# Download similarity.pkl
-similarity_url = "https://drive.google.com/uc?id=19-LunxNRbAIrwRpaOfmlBpV7D1LAgypR"
-urllib.request.urlretrieve(similarity_url, "models/similarity.pkl")
-
-# Load data
-movies_dict = pickle.load(open('models/movie_dict.pkl', 'rb'))
-movies = pd.DataFrame(movies_dict)
-similarity = pickle.load(open('models/similarity.pkl', 'rb'))
-
-# Create models folder if not exists
-if not os.path.exists("models"):
-    os.makedirs("models")
-
-# Use gdown to download directly from Google Drive
+# Use gdown to download directly from Google Drive (RECOMMENDED)
 movie_dict_url = "https://drive.google.com/uc?id=13zleeD7zwLRLHI0VMxBbFVGOm8R4pdcb"
 similarity_url = "https://drive.google.com/uc?id=19-LunxNRbAIrwRpaOfmlBpV7D1LAgypR"
 
 gdown.download(movie_dict_url, "models/movie_dict.pkl", quiet=False)
 gdown.download(similarity_url, "models/similarity.pkl", quiet=False)
 
-# TMDB Poster Fetch Function
+# ✅ Now load after download
+movies_dict = pickle.load(open('models/movie_dict.pkl', 'rb'))
+movies = pd.DataFrame(movies_dict)
+similarity = pickle.load(open('models/similarity.pkl', 'rb'))
+
+# Fetch poster from TMDB
 def fetch_poster(movie_id):
     response = requests.get(
         f'https://api.themoviedb.org/3/movie/{movie_id}?api_key=c988694dfb23ccc5a55ac82f632288b0&language=en-US'
@@ -42,7 +29,7 @@ def fetch_poster(movie_id):
     data = response.json()
     return "https://image.tmdb.org/t/p/w500/" + data['poster_path']
 
-# Recommendation Function
+# Recommend movies
 def recommend(movie):
     movie_index = movies[movies['title'] == movie].index[0]
     distances = similarity[movie_index]
